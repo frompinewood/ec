@@ -3,6 +3,7 @@
 *.beam
 *.plt
 erl_crash.dump
+ebin
 .concrete/DEV_MODE
 
 # rebar 2.x
@@ -15,3 +16,7 @@ deps
 .rebar3
 _build/
 _checkouts/
+
+# erlang.mk
+.erlang.mk
+ec.d
