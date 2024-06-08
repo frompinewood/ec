@@ -1,7 +1,7 @@
 -module(ec).
 
 -export(['ESC'/0, 'ESC'/1, 'HOME'/0, 'MV'/2, 'RIGHT'/1, 'UP'/1, 'LEFT'/1, 'DOWN'/1,
-         'NEXT'/1, 'PREV'/1, 'COL'/1]).
+         'NEXT'/1, 'PREV'/1, 'COL'/1, 'POS'/0]).
 -export(['ERASE_IN_DISPLAY'/0, 'ERASE_CURSOR_END_SCREEN'/0, 'ERASE_CURSOR_BEGIN_SCREEN'/0,
          'ERASE_SCREEN'/0]).
 -export(['ERASE_IN_LINE'/0, 'ERASE_CURSOR_END_LINE'/0, 'ERASE_CURSOR_BEGIN_LINE'/0,
@@ -82,6 +82,13 @@ prev_test() ->
 
 col_test() ->
   ?assertEqual([27, $[, $1, $0, $G], lists:flatten('COL'(10))).
+
+-spec 'POS'() -> iodata().
+'POS'() ->
+  'ESC'([$[, $6, $n]).
+
+pos_test() ->
+  ?assertEqual([27, $[, $6, $n], lists:flatten('POS'())).
 
 %% Erase
 -spec 'ERASE_IN_DISPLAY'() -> iodata().
