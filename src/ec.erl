@@ -6,6 +6,7 @@
          erase_screen/0]).
 -export([erase_in_line/0, erase_cursor_end_line/0, erase_cursor_begin_line/0,
          erase_line/0]).
+-export([graphics/2]).
 
 -include_lib("eunit/include/eunit.hrl").
 
@@ -146,3 +147,92 @@ erase_line() ->
 
 erase_line_test() ->
   ?assertEqual([27, $[, $2, $K], lists:flatten(erase_line())).
+
+% foreground
+mode_to_list(fg_black) ->
+  "30";
+mode_to_list(fg_red) ->
+  "31";
+mode_to_list(fg_green) ->
+  "32";
+mode_to_list(fg_yellow) ->
+  "33";
+mode_to_list(fg_blue) ->
+  "34";
+mode_to_list(fg_magenta) ->
+  "35";
+mode_to_list(fg_cyan) ->
+  "36";
+mode_to_list(fg_white) ->
+  "37";
+mode_to_list(fg_default) ->
+  "39";
+mode_to_list(fg_reset) ->
+  "0";
+% background
+mode_to_list(bg_black) ->
+  "40";
+mode_to_list(bg_red) ->
+  "41";
+mode_to_list(bg_green) ->
+  "42";
+mode_to_list(bg_yellow) ->
+  "43";
+mode_to_list(bg_blue) ->
+  "44";
+mode_to_list(bg_magenta) ->
+  "45";
+mode_to_list(bg_cyan) ->
+  "46";
+mode_to_list(bg_white) ->
+  "47";
+mode_to_list(bg_default) ->
+  "49";
+mode_to_list(bg_reset) ->
+  "0";
+% display modes
+mode_to_list(bold) ->
+  "1";
+mode_to_list(dim) ->
+  "2";
+mode_to_list(italic) ->
+  "3";
+mode_to_list(underline) ->
+  "4";
+mode_to_list(blink) ->
+  "5";
+mode_to_list(inverse) ->
+  "7";
+mode_to_list(hidden) ->
+  "8";
+mode_to_list(strikethrough) ->
+  "9";
+% reset display modes
+mode_to_list(r_bold) ->
+  "21";
+mode_to_list(r_dim) ->
+  "22";
+mode_to_list(r_italic) ->
+  "23";
+mode_to_list(r_underline) ->
+  "24";
+mode_to_list(r_blink) ->
+  "25";
+mode_to_list(r_inverse) ->
+  "27";
+mode_to_list(r_hidden) ->
+  "28";
+mode_to_list(r_strikethrough) ->
+  "29";
+mode_to_list(reset) ->
+  "0".
+
+graphics(Text, Modes) ->
+  ExpandedModes =
+    string:join(
+      lists:map(fun mode_to_list/1, Modes), ";"),
+  esc([$[, ExpandedModes, $m, Text, esc([$[, mode_to_list(reset), $m])]).
+
+graphics_test() ->
+  ?assertEqual([27, $[, $3, $0, $m, $H, $i, $., 27, $[, $0, $m],
+               lists:flatten(graphics("Hi.", [fg_black]))).
